@@ -1,37 +1,29 @@
 package dev.zontreck.claims.savedata;
 
-import java.util.UUID;
-
 import dev.zontreck.libzontreck.vectors.ChunkPos;
-import dev.zontreck.libzontreck.vectors.Vector2;
-import dev.zontreck.libzontreck.vectors.Vector3;
-import dev.zontreck.libzontreck.vectors.WorldPosition;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.commands.TitleCommand;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 
 public class ClaimedChunk {
     public ChunkPos ChunkPosition;
-    public UUID Owner;
-    public ChunkFlags Flags;
+    public Claim parent; // Necessary to quickly access the claim itself
 
-    public ClaimedChunk(Player owner, ChunkPos chunkPos)
+    public ClaimedChunk(Claim main, ChunkPos chunkPos)
     {
-        this(owner.getUUID(), chunkPos);
+        parent=main;
+        ChunkPosition=chunkPos;
     }
 
-    public ClaimedChunk(UUID ID, ChunkPos chunk){
-        Owner=ID;
-        ChunkPosition=chunk;
-        Flags=ChunkFlags.Empty;
+
+    public CompoundTag serialize()
+    {
+        CompoundTag tag = new CompoundTag();
+        tag.put("pos", ChunkPosition.serialize());
+
+        return tag;
     }
 
-    public static ClaimedChunk get(Player owner)
+    public ClaimedChunk(CompoundTag tag)
     {
-        WorldPosition wp = new WorldPosition(new Vector3(owner.position()), (ServerLevel)owner.level);
-        ChunkPos pos = wp.getChunkPos();
-
-        
+        ChunkPosition = new ChunkPos(tag.getCompound("pos"));
     }
 }

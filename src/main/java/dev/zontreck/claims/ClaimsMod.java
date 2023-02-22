@@ -1,5 +1,7 @@
 package dev.zontreck.claims;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,5 +39,15 @@ public class ClaimsMod {
             //LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
 
+    }
+
+    @Mod.EventBusSubscriber(modid = ClaimsMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ForgeModEvents
+    {
+        @SubscribeEvent
+        public static void onPlayerMoved(LivingEvent.LivingTickEvent ev)
+        {
+            
+        }
     }
 }
